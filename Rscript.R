@@ -46,6 +46,6 @@ row.names(df) <- NULL
 colnames(df) <- c("subject", "activity", colnames(df[3:ncol(df)]))
 df <- arrange(df, as.numeric(df$subject))
 
-write.table(df, file = "tidy_dataset.csv", sep = ",", col.names = T, row.names = F)
+write.table(df, file = "tidy_dataset.csv", sep = ",", col.names = T, row.names = F, quote = F)
 
 write.csv(colnames(df), file = "colnames.csv", sep = ",", quote = F, col.names = NA)
