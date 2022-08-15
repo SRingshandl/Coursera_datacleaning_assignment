@@ -1,3 +1,5 @@
+library(dplyr)
+
 #set working directory
 setwd("C:/Users/Stephan/Desktop/Coursera/Data cleaning/final_test")
 
@@ -36,6 +38,14 @@ for(row in 1:nrow(data_filtered)){
 }
 
 #create tidy dataset with mean values for each activity and participant
-data_filtered$participantactivity <- paste(data_filtered[,1], data_filtered[,2], sep = "_")
+data_filtered$participantactivity <- paste(data_filtered[,1], data_filtered[,2], sep = "-")
+df <- data.frame(apply(data_filtered[,3:(ncol(data_filtered)-1)], 2, FUN = function(x) tapply(x, data_filtered[,ncol(data_filtered)], mean)), check.names = FALSE)
+participants <- gsub("_*", "", row.names(df))
+df <- cbind(t(data.frame(strsplit(row.names(df), "-"))), df)
+row.names(df) <- NULL
+colnames(df) <- c("subject", "activity", colnames(df[3:ncol(df)]))
+df <- arrange(df, as.numeric(df$subject))
 
+write.table(df, file = "tidy_dataset.csv", sep = ",", col.names = T, row.names = F)
 
+write.csv(colnames(df), file = "colnames.csv", sep = ",", quote = F, col.names = NA)
